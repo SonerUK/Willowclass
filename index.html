@@ -1,24 +1,23 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kelime Yazma Oyunu</title>
+    <title>Spelling Game</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-        <h1>Kelime Yazma Alıştırması</h1>
+        <h1>Spelling Practice</h1>
         <div id="word-display-container">
             </div>
-        <div id="word-to-spell" style="display: none;"></div>
-        <input type="text" id="letter-input" maxlength="1" placeholder="Harf girin">
-        <button id="submit-letter-button">Harfi Yerleştir</button>
-        <button id="speak-button">Kelimeyi Dinle</button>
-        <button id="next-word-button">Sonraki Kelime</button>
+        <div id="word-to-spell" style="display: none;"></div> <input type="text" id="letter-input" maxlength="1" placeholder="Enter a letter">
+        <button id="submit-letter-button">Place Letter</button>
+        <button id="speak-button">Listen to Word</button>
+        <button id="next-word-button">Next Word</button>
         <p id="feedback"></p>
-        <p>Doğru Bilinenler: <span id="correct-count">0</span></p>
-        <p>Kalan Kelimeler: <span id="remaining-count">0</span></p>
+        <p>Correct: <span id="correct-count">0</span></p>
+        <p>Words Remaining: <span id="remaining-count">0</span></p>
     </div>
     <script src="script.js"></script>
 </body>
