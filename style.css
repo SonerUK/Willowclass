@@ -1,13 +1,12 @@
-/* ... (body, container, h1, category styles etc. - öncekiyle aynı) ... */
 body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     display: flex;
     justify-content: center;
-    align-items: flex-start;
+    align-items: flex-start; /* Changed to flex-start for longer content */
     min-height: 100vh;
     background-color: #eef7ff;
     margin: 0;
-    padding: 20px;
+    padding: 20px; /* Added padding to body */
     box-sizing: border-box;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -20,7 +19,7 @@ body {
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
     text-align: center;
     width: 100%;
-    max-width: 700px;
+    max-width: 700px; /* Increased max-width */
 }
 
 h1 {
@@ -29,6 +28,7 @@ h1 {
     margin-bottom: 20px;
 }
 
+/* Category Selection Styles */
 #category-selection-area {
     margin-bottom: 30px;
     padding: 15px;
@@ -46,15 +46,15 @@ h1 {
 
 .category-group {
     display: flex;
-    justify-content: space-around;
-    flex-wrap: wrap;
+    justify-content: space-around; /* Distribute labels more evenly */
+    flex-wrap: wrap; /* Allow wrapping on smaller screens */
     margin-bottom: 10px;
 }
 
 .category-group label {
-    display: flex;
+    display: flex; /* Align checkbox and text */
     align-items: center;
-    margin: 5px 10px;
+    margin: 5px 10px; /* Add some margin around labels */
     font-size: 0.95em;
     color: #555;
     cursor: pointer;
@@ -62,36 +62,38 @@ h1 {
 
 .category-group input[type="checkbox"] {
     margin-right: 8px;
-    transform: scale(1.2);
-    accent-color: #3498db;
+    transform: scale(1.2); /* Make checkboxes slightly larger */
+    accent-color: #3498db; /* Change checkbox color */
 }
 
+
+/* Game Area & Main Button Styles */
 #game-area {
     margin-top: 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 20px;
+    gap: 20px; /* Space between button and input/feedback areas */
 }
 
 .round-button {
-    width: 130px;
+    width: 130px; /* Increased size */
     height: 130px;
-    border-radius: 50%;
+    border-radius: 50%; /* Makes it round */
     background-color: #3498db;
     color: white;
-    font-size: 1.1em;
+    font-size: 1.1em; /* Adjusted font size */
     font-weight: bold;
     border: none;
     cursor: pointer;
     display: flex;
     justify-content: center;
     align-items: center;
-    text-align: center;
+    text-align: center; /* Ensure text is centered */
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
-    padding: 10px;
-    line-height: 1.2;
+    padding: 10px; /* Add some padding for text */
+    line-height: 1.2; /* Help with multi-line text in button */
 }
 
 .round-button:hover {
@@ -111,27 +113,29 @@ h1 {
     transform: translateY(0);
 }
 button#listen-again-button {
-    background-color: #9b59b6;
+    background-color: #9b59b6; /* Purple for Listen Again */
     color: white;
     padding: 10px 20px;
     border-radius: 6px;
     border: none;
     font-size: 0.9em;
     cursor: pointer;
-    margin-top: 10px;
-    /* display: none; /* Replaced by .hidden class */
+    margin-top: 10px; /* Space from main button if shown */
+    /* display: none; /* Controlled by .hidden class */
 }
 button#listen-again-button:hover {
     background-color: #8e44ad;
 }
 
+
+/* Input and Feedback Area Styles (mostly same as before) */
 #word-input-container {
     display: flex; /* Varsayılan görünür durum */
     justify-content: center;
     align-items: center;
     min-height: 50px;
     flex-wrap: wrap;
-    /* display: none; /* Replaced by .hidden class */
+    /* display: none; /* Controlled by .hidden class */
 }
 
 .letter-input {
@@ -156,7 +160,7 @@ button#listen-again-button:hover {
 
 #correct-word-feedback-area {
     margin-top: 10px;
-    /* display: none; /* Replaced by .hidden class */
+    /* display: none; /* Controlled by .hidden class */
 }
 #correct-word-label { margin-bottom: 5px; font-weight: bold; color: #2c3e50; font-size: 0.95em;}
 #correct-word-display-container { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; }
@@ -173,11 +177,11 @@ button#listen-again-button:hover {
 
 #score-area {
     margin-top: 20px;
-     /* display: none; /* Replaced by .hidden class */
+     /* display: none; /* Controlled by .hidden class */
 }
 #score-area p { font-size: 1em; color: #34495e; margin: 5px 0; }
 
-/* ---- YENİ GİZLEME SINIFI ---- */
+/* ---- GİZLEME SINIFI ---- */
 .hidden {
     display: none !important; /* !important, diğer display kurallarını ezmek için */
 }
