@@ -1,0 +1,82 @@
+body {
+    font-family: sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f0f0f0;
+    margin: 0;
+}
+
+.container {
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+#word-display-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+    min-height: 50px; /* Kutu kaymasını engellemek için */
+}
+
+.letter-box {
+    border: 2px solid #ccc;
+    width: 40px;
+    height: 40px;
+    margin: 0 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    font-weight: bold;
+    text-transform: uppercase;
+    background-color: #fff;
+}
+
+.letter-box.filled {
+    border-color: #3498db;
+    background-color: #eaf2f8;
+}
+
+input[type="text"] {
+    padding: 10px;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 100px;
+    text-align: center;
+    font-size: 16px;
+}
+
+button {
+    padding: 10px 15px;
+    margin: 5px;
+    border: none;
+    border-radius: 5px;
+    background-color: #3498db;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button:hover {
+    background-color: #2980b9;
+}
+
+#feedback {
+    margin-top: 15px;
+    font-size: 18px;
+    min-height: 25px; /* Geri bildirim alanı için yer ayır */
+}
+
+#feedback.correct {
+    color: green;
+}
+
+#feedback.incorrect {
+    color: red;
+}
