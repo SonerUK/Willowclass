@@ -2,11 +2,11 @@ body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     display: flex;
     justify-content: center;
-    align-items: flex-start; /* Changed to flex-start for longer content */
+    align-items: flex-start;
     min-height: 100vh;
     background-color: #eef7ff;
     margin: 0;
-    padding: 20px; /* Added padding to body */
+    padding: 20px;
     box-sizing: border-box;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -19,7 +19,7 @@ body {
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
     text-align: center;
     width: 100%;
-    max-width: 700px; /* Increased max-width */
+    max-width: 700px;
 }
 
 h1 {
@@ -46,15 +46,15 @@ h1 {
 
 .category-group {
     display: flex;
-    justify-content: space-around; /* Distribute labels more evenly */
-    flex-wrap: wrap; /* Allow wrapping on smaller screens */
+    justify-content: space-around;
+    flex-wrap: wrap;
     margin-bottom: 10px;
 }
 
 .category-group label {
-    display: flex; /* Align checkbox and text */
+    display: flex;
     align-items: center;
-    margin: 5px 10px; /* Add some margin around labels */
+    margin: 5px 10px;
     font-size: 0.95em;
     color: #555;
     cursor: pointer;
@@ -62,8 +62,8 @@ h1 {
 
 .category-group input[type="checkbox"] {
     margin-right: 8px;
-    transform: scale(1.2); /* Make checkboxes slightly larger */
-    accent-color: #3498db; /* Change checkbox color */
+    transform: scale(1.2);
+    accent-color: #3498db;
 }
 
 
@@ -73,27 +73,27 @@ h1 {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 20px; /* Space between button and input/feedback areas */
+    gap: 20px; /* Buton ve diğer alanlar arası boşluk */
 }
 
 .round-button {
-    width: 130px; /* Increased size */
+    width: 130px;
     height: 130px;
-    border-radius: 50%; /* Makes it round */
+    border-radius: 50%;
     background-color: #3498db;
     color: white;
-    font-size: 1.1em; /* Adjusted font size */
+    font-size: 1.1em;
     font-weight: bold;
     border: none;
     cursor: pointer;
     display: flex;
     justify-content: center;
     align-items: center;
-    text-align: center; /* Ensure text is centered */
+    text-align: center;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
-    padding: 10px; /* Add some padding for text */
-    line-height: 1.2; /* Help with multi-line text in button */
+    padding: 10px;
+    line-height: 1.2;
 }
 
 .round-button:hover {
@@ -113,72 +113,45 @@ h1 {
     transform: translateY(0);
 }
 button#listen-again-button {
-    background-color: #9b59b6; /* Purple for Listen Again */
+    background-color: #9b59b6; /* Purple */
     color: white;
     padding: 10px 20px;
     border-radius: 6px;
     border: none;
     font-size: 0.9em;
     cursor: pointer;
-    margin-top: 10px; /* Space from main button if shown */
+    margin-top: 10px;
     /* display: none; /* Controlled by .hidden class */
 }
 button#listen-again-button:hover {
     background-color: #8e44ad;
 }
 
+/* --- .letter-input stilleri SİLİNDİ --- */
 
-/* Input and Feedback Area Styles */
-#word-input-container {
-    display: flex; /* Default display state when not hidden */
-    justify-content: center;
-    align-items: center;
-    min-height: 50px;
-    flex-wrap: wrap;
-}
 
-.letter-input {
-    width: 40px; height: 45px; margin: 5px; text-align: center;
-    font-size: 24px; font-weight: bold; text-transform: uppercase;
-    border: 2px solid #bdc3c7; border-radius: 8px; background-color: #fdfdfe;
-    color: #34495e; outline: none; caret-color: #3498db;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
-}
-.letter-input:focus {
-    border-color: #3498db; box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
-}
-.letter-input.correct {
-    border-color: #2ecc71 !important; color: #2ecc71 !important; background-color: #f0fff4;
-}
-.letter-input.incorrect {
-    border-color: #e74c3c !important; color: #e74c3c !important; background-color: #fff0f0;
-}
-.letter-input:disabled {
-    background-color: #ecf0f1; color: #7f8c8d; cursor: not-allowed;
-}
-
+/* Correct Word Display Area Styles */
 #correct-word-feedback-area {
-    margin-top: 10px;
-    /* display: block; /* Default display state when not hidden */
+    margin-top: 15px; /* Yukarıdaki boşluk ayarlandı */
+    margin-bottom: 10px;
+    /* display: none; /* Controlled by .hidden class */
 }
-#correct-word-label { margin-bottom: 5px; font-weight: bold; color: #2c3e50; font-size: 0.95em;}
+#correct-word-label { margin-bottom: 8px; font-weight: bold; color: #2c3e50; font-size: 1em;}
 #correct-word-display-container { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; }
 .correct-letter-box {
-    width: 38px; height: 42px; margin: 4px; display: flex;
-    justify-content: center; align-items: center; font-size: 22px;
+    width: 40px; height: 45px; margin: 5px; display: flex;
+    justify-content: center; align-items: center; font-size: 24px;
     font-weight: bold; text-transform: uppercase; border: 2px solid #27ae60;
-    border-radius: 6px; background-color: #e9f7ef; color: #2c3e50;
+    border-radius: 8px; background-color: #e9f7ef; color: #2c3e50;
 }
 
+/* Feedback styles */
 #feedback { margin-top: 15px; font-size: 1.1em; min-height: 28px; font-weight: 500; }
 #feedback.correct { color: #2ecc71; }
 #feedback.incorrect { color: #e74c3c; }
 
-#score-area {
-    margin-top: 20px;
-    /* display: block; /* Default display state when not hidden */
-}
-#score-area p { font-size: 1em; color: #34495e; margin: 5px 0; }
+/* --- Skor alanı stilleri SİLİNDİ (HTML'den de silindiği için) --- */
+
 
 /* ---- GİZLEME SINIFI ---- */
 .hidden {
@@ -191,15 +164,15 @@ button#listen-again-button:hover {
     .category-group { flex-direction: column; align-items: flex-start; }
     .category-group label { margin: 8px 0; width: 100%; }
     .round-button { width: 110px; height: 110px; font-size: 1em; }
-    .letter-input, .correct-letter-box { width: 35px; height: 40px; font-size: 20px; margin: 3px; }
+     /* .letter-input stilleri silindi */
+    .correct-letter-box { width: 35px; height: 40px; font-size: 20px; margin: 3px; }
     button#listen-again-button { font-size: 0.85em; padding: 8px 15px;}
 }
 @media (max-width: 420px) {
     h1 { font-size: 1.4em; }
     .round-button { width: 100px; height: 100px; font-size: 0.9em; }
-    .letter-input, .correct-letter-box { width: 30px; height: 35px; font-size: 18px; margin: 2px; }
+     /* .letter-input stilleri silindi */
+    .correct-letter-box { width: 30px; height: 35px; font-size: 18px; margin: 2px; }
     #feedback { font-size: 1em; }
-    #score-area p { font-size: 0.9em; }
-    .category-group label { font-size: 0.9em;}
      button#listen-again-button { width: 60%; max-width: 200px;}
 }
