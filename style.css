@@ -4,26 +4,29 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background-color: #f0f8ff;
+    background-color: #eef7ff; /* Slightly different light blue */
     margin: 0;
     padding: 10px;
     box-sizing: border-box;
+    -webkit-font-smoothing: antialiased; /* Smoother fonts on WebKit */
+    -moz-osx-font-smoothing: grayscale; /* Smoother fonts on Firefox */
 }
 
 .container {
     background-color: white;
     padding: 25px 30px;
-    border-radius: 12px;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.12);
+    border-radius: 16px; /* More rounded corners */
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1); /* Softer shadow */
     text-align: center;
     width: 100%;
-    max-width: 600px; /* Max width can be adjusted */
+    max-width: 600px;
+    transition: all 0.3s ease-out; /* Smooth transitions for resizing */
 }
 
 h1 {
-    color: #333;
-    font-size: 1.7em; /* Slightly adjusted for balance */
-    margin-bottom: 20px;
+    color: #2c3e50; /* Darker blue-grey */
+    font-size: 1.8em;
+    margin-bottom: 25px;
     font-weight: 600;
     line-height: 1.3;
 }
@@ -32,147 +35,176 @@ h1 {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: 25px;
+    margin-bottom: 30px;
     min-height: 50px;
-    flex-wrap: wrap; /* Allow boxes to wrap for long words on small screens */
+    flex-wrap: wrap;
 }
 
-.letter-input { /* Styling for the new input boxes */
-    width: 40px;
-    height: 45px;
+.letter-input {
+    width: 42px; /* Slightly larger */
+    height: 48px;
     margin: 5px;
-    padding: 0; /* Remove default padding if any */
+    padding: 0;
     text-align: center;
-    font-size: 24px;
+    font-size: 26px; /* Larger font size */
     font-weight: bold;
     text-transform: uppercase;
-    border: 2px solid #b0c4de;
-    border-radius: 6px;
-    background-color: #f8f9fa;
-    color: #333;
-    outline: none; /* Remove default outline */
-    caret-color: #4682b4; /* Cursor color */
-    transition: border-color 0.3s, box-shadow 0.3s;
+    border: 2px solid #bdc3c7; /* Grey border */
+    border-radius: 8px; /* More rounded inputs */
+    background-color: #fdfdfe; /* Very light grey */
+    color: #34495e; /* Darker text color */
+    outline: none;
+    caret-color: #3498db; /* Blue caret */
+    transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out, background-color 0.2s;
 }
 
 .letter-input:focus {
-    border-color: #4682b4; /* SteelBlue on focus */
-    box-shadow: 0 0 8px rgba(70, 130, 180, 0.5);
+    border-color: #3498db; /* Blue border on focus */
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2); /* Soft glow on focus */
 }
 
-/* Styling for correct/incorrect input boxes */
 .letter-input.correct {
-    border-color: #28a745 !important; /* Bootstrap green */
-    color: #28a745 !important;
-    background-color: #e9f7ef;
+    border-color: #2ecc71 !important; /* Bright green */
+    color: #2ecc71 !important;
+    background-color: #f0fff4; /* Very light green background */
 }
 
 .letter-input.incorrect {
-    border-color: #dc3545 !important; /* Bootstrap red */
-    color: #dc3545 !important;
-    background-color: #fbeae5;
+    border-color: #e74c3c !important; /* Bright red */
+    color: #e74c3c !important;
+    background-color: #fff0f0; /* Very light red background */
+}
+.letter-input:disabled { /* Style for disabled inputs after correct guess */
+    background-color: #ecf0f1;
+    color: #7f8c8d;
+    cursor: not-allowed;
 }
 
 
 .controls {
-    margin-bottom: 20px;
+    margin-bottom: 25px;
     display: flex;
-    flex-wrap: wrap; /* Allow buttons to wrap on small screens */
-    justify-content: center; /* Center buttons */
-    gap: 10px; /* Space between buttons */
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px; /* Slightly larger gap */
 }
 
 button {
-    padding: 10px 15px; /* Adjusted padding slightly */
-    /* margin: 5px; */ /* Replaced by gap */
+    padding: 12px 20px; /* More padding */
     border: none;
-    border-radius: 6px;
-    background-color: #5cacee;
+    border-radius: 8px; /* More rounded buttons */
+    background-color: #3498db; /* Blue */
     color: white;
     cursor: pointer;
-    font-size: 15px; /* Slightly smaller font for more buttons */
+    font-size: 16px;
     font-weight: 500;
-    transition: background-color 0.2s ease-in-out, transform 0.1s ease;
-    min-width: 100px; /* Minimum width for buttons */
+    transition: background-color 0.2s ease-in-out, transform 0.1s ease, box-shadow 0.2s ease;
+    min-width: 110px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+button#next-word-button {
+    background-color: #2ecc71; /* Green for Next Word */
+}
+button#next-word-button:hover {
+    background-color: #27ae60;
+}
+button#check-word-button {
+    background-color: #f39c12; /* Orange for Check Word */
+}
+button#check-word-button:hover {
+    background-color: #e67e22;
+}
+button#speak-button:hover {
+    background-color: #2980b9; /* Darker blue for speak */
 }
 
+
 button:hover {
-    background-color: #4a8dc7;
+    /* background-color handled by specific button hovers */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    transform: translateY(-1px);
 }
 
 button:active {
-    transform: translateY(1px);
+    transform: translateY(0px);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
 button:disabled {
-    background-color: #cccccc; /* Lighter grey for disabled */
-    color: #666666;
+    background-color: #bdc3c7 !important; /* Greyed out */
+    color: #7f8c8d !important;
     cursor: not-allowed;
+    box-shadow: none;
+    transform: translateY(0);
 }
 
 #feedback {
-    margin-top: 15px; /* Reduced margin slightly */
-    font-size: 17px;
-    min-height: 25px;
+    margin-top: 20px;
+    font-size: 18px; /* Larger feedback text */
+    min-height: 28px; /* More space for feedback */
     font-weight: 500;
 }
 
 #feedback.correct {
-    color: #28a745;
+    color: #2ecc71;
 }
 
 #feedback.incorrect {
-    color: #dc3545;
+    color: #e74c3c;
 }
 
-p:not(#feedback) { /* Target score paragraphs specifically */
-    font-size: 16px;
-    color: #555;
-    margin-top: 8px;
+p:not(#feedback) {
+    font-size: 17px; /* Larger score text */
+    color: #34495e;
+    margin-top: 10px;
 }
 
 /* Responsive adjustments */
 @media (max-width: 600px) {
     .container {
-        padding: 20px 15px; /* Adjust padding */
+        padding: 20px 15px;
+        margin: 10px; /* Add margin for small screens */
     }
 
     h1 {
-        font-size: 1.5em;
+        font-size: 1.6em;
     }
 
     .letter-input {
-        width: 35px; /* Smaller input boxes */
-        height: 40px;
-        font-size: 20px;
-        margin: 3px;
+        width: 38px;
+        height: 44px;
+        font-size: 22px;
+        margin: 4px;
     }
 
+    .controls {
+        gap: 8px;
+    }
     button {
         font-size: 14px;
-        padding: 8px 12px;
-        min-width: 90px;
+        padding: 10px 15px;
+        min-width: 95px;
     }
 }
 
 @media (max-width: 420px) {
     h1 {
-        font-size: 1.3em;
+        font-size: 1.4em;
     }
     .letter-input {
-        width: 30px;
-        height: 35px;
-        font-size: 18px;
-        margin: 2px;
+        width: 32px;
+        height: 38px;
+        font-size: 20px;
+        margin: 3px;
     }
-
     .controls {
-        gap: 5px; /* Smaller gap for more buttons */
+        flex-direction: column; /* Stack buttons on very small screens */
+        align-items: center;
     }
     button {
-        font-size: 13px;
-        padding: 8px 10px;
-        flex-grow: 1; /* Allow buttons to grow and fill space if fewer */
-        min-width: 80px;
+        font-size: 14px;
+        width: 80%; /* Make buttons wider when stacked */
+        max-width: 250px;
+        padding: 12px;
     }
 }
