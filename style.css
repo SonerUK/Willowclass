@@ -6,7 +6,7 @@ body {
     min-height: 100vh;
     background-color: #eef7ff;
     margin: 0;
-    padding: 10px 15px; /* Üst/alt padding azaltıldı */
+    padding: 10px 15px; /* Reduced top/bottom padding */
     box-sizing: border-box;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -14,81 +14,88 @@ body {
 
 .container {
     background-color: white;
-    padding: 20px 25px; /* Üst/alt padding azaltıldı */
+    padding: 20px 25px; /* Reduced top/bottom padding */
     border-radius: 16px;
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
     text-align: center;
     width: 100%;
-    max-width: 650px; /* Max genişlik biraz ayarlandı */
+    max-width: 650px;
 }
 
 h1 {
     color: #2c3e50;
-    font-size: 1.6em; /* Punto küçültüldü */
-    margin-top: 5px; /* Üst boşluk azaltıldı */
-    margin-bottom: 15px; /* Alt boşluk ayarlandı */
+    font-size: 1.6em; /* Reduced size */
+    margin-top: 5px;
+    margin-bottom: 15px;
     font-weight: 600;
-    line-height: 1.25; /* Satır yüksekliği */
+    line-height: 1.25;
 }
 
 /* Category Selection Styles */
 #category-selection-area {
-    margin-bottom: 20px; /* Alt boşluk azaltıldı */
-    padding: 10px; /* Padding azaltıldı */
+    margin-bottom: 20px;
+    padding: 10px;
     border: 1px solid #ddeeff;
     border-radius: 8px;
     background-color: #f9fcff;
 }
 
 #category-selection-area h2 {
-    font-size: 1.1em; /* Biraz küçültüldü */
+    font-size: 1.1em;
     color: #34495e;
     margin-top: 0;
-    margin-bottom: 10px; /* Alt boşluk azaltıldı */
+    margin-bottom: 10px;
 }
 
 .category-group {
     display: flex;
-    justify-content: center; /* Ortala */
-    flex-wrap: wrap;
-    margin-bottom: 5px; /* Gruplar arası boşluk azaltıldı */
-    gap: 5px 10px; /* Etiketler arası boşluk (dikey yatay) */
+    justify-content: space-around; /* Distribute the two labels within */
+    flex-wrap: nowrap; /* Prevent labels in the same group from wrapping */
+    margin-bottom: 8px; /* Space between the two groups (rows) */
+}
+/* Last group doesn't need bottom margin */
+.category-group:last-of-type {
+    margin-bottom: 0;
 }
 
 .category-group label {
-    display: inline-flex; /* Yan yana gelmelerini kolaylaştır */
+    display: inline-flex;
     align-items: center;
-    /* margin: 5px 8px; /* Gap ile yönetildiği için kaldırıldı veya azaltıldı */
+    margin: 0 5px; /* Horizontal margin between labels */
     font-size: 0.9em;
     color: #555;
     cursor: pointer;
-    padding: 3px 5px; /* İç boşluk */
-    white-space: nowrap; /* Etiketin alta kaymasını engelle (kısa etiketlerle sorun olmaz) */
+    padding: 3px;
+    white-space: nowrap; /* Prevent label text wrapping */
+    justify-content: center; /* Center content within label */
+    flex-basis: 45%; /* Try to give labels a base width */
+    text-align: left; /* Align text left within label */
 }
 
 .category-group input[type="checkbox"] {
     margin-right: 5px;
     transform: scale(1.1);
     accent-color: #3498db;
+    flex-shrink: 0; /* Prevent checkbox shrinking */
 }
 
 
 /* Game Area & Main Button Styles */
 #game-area {
-    margin-top: 15px; /* Üst boşluk ayarlandı */
+    margin-top: 15px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 15px; /* Boşluk ayarlandı */
+    gap: 15px;
 }
 
 .round-button {
-    width: 110px; /* Küçültüldü */
+    width: 110px;
     height: 110px;
     border-radius: 50%;
     background-color: #3498db;
     color: white;
-    font-size: 1em; /* Küçültüldü */
+    font-size: 1em;
     font-weight: bold;
     border: none;
     cursor: pointer;
@@ -96,28 +103,17 @@ h1 {
     justify-content: center;
     align-items: center;
     text-align: center;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); /* Gölge ayarlandı */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
     transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
     padding: 8px;
     line-height: 1.2;
+    flex-shrink: 0; /* Prevent button shrinking */
 }
+/* (Hover, active, disabled styles remain the same) */
+.round-button:hover { background-color: #2980b9; transform: translateY(-2px); box-shadow: 0 6px 12px rgba(0, 0, 0, 0.20); }
+.round-button:active { transform: translateY(0px); box-shadow: 0 3px 7px rgba(0,0,0,0.2); }
+.round-button:disabled { background-color: #bdc3c7 !important; color: #7f8c8d !important; cursor: not-allowed; box-shadow: none; transform: translateY(0); }
 
-.round-button:hover {
-    background-color: #2980b9;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.20);
-}
-.round-button:active {
-    transform: translateY(0px);
-    box-shadow: 0 3px 7px rgba(0,0,0,0.2);
-}
-.round-button:disabled {
-    background-color: #bdc3c7 !important;
-    color: #7f8c8d !important;
-    cursor: not-allowed;
-    box-shadow: none;
-    transform: translateY(0);
-}
 button#listen-again-button {
     background-color: #9b59b6;
     color: white;
@@ -127,50 +123,25 @@ button#listen-again-button {
     font-size: 0.85em;
     cursor: pointer;
     margin-top: 5px;
+    flex-shrink: 0;
 }
-button#listen-again-button:hover {
-    background-color: #8e44ad;
-}
+button#listen-again-button:hover { background-color: #8e44ad; }
 
 /* Correct Word Display Area Styles */
-#correct-word-feedback-area {
-    margin-top: 10px;
-    margin-bottom: 10px;
-    width: 100%;
-    overflow-x: auto; /* Gerektiğinde yatay kaydırma */
-    padding-bottom: 5px;
-}
+#correct-word-feedback-area { margin-top: 10px; margin-bottom: 10px; width: 100%; overflow-x: auto; padding-bottom: 5px; }
 #correct-word-label { margin-bottom: 5px; font-weight: bold; color: #2c3e50; font-size: 0.9em;}
-#correct-word-display-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: nowrap; /* Alt satıra kaymayı engelle */
-    width: max-content; /* İçeriğe göre genişle */
-    margin: 0 auto;
-}
+#correct-word-display-container { display: flex; justify-content: center; align-items: center; flex-wrap: nowrap; width: max-content; margin: 0 auto; }
 .correct-letter-box {
-    width: 32px; /* Kutular küçültüldü */
-    height: 38px;
-    margin: 2px; /* Boşluk azaltıldı */
-    display: flex;
-    flex-shrink: 0;
-    justify-content: center;
-    align-items: center;
-    font-size: 18px; /* Yazı küçültüldü */
-    font-weight: bold;
-    text-transform: uppercase;
-    border: 1px solid #27ae60; /* Kenarlık inceltildi */
-    border-radius: 5px; /* Köşe yuvarlaklığı azaltıldı */
-    background-color: #e9f7ef;
-    color: #2c3e50;
+    width: 32px; height: 38px; margin: 2px; display: flex; flex-shrink: 0;
+    justify-content: center; align-items: center; font-size: 18px;
+    font-weight: bold; text-transform: uppercase; border: 1px solid #27ae60;
+    border-radius: 5px; background-color: #e9f7ef; color: #2c3e50;
 }
 
 /* Feedback styles */
 #feedback { margin-top: 10px; font-size: 1em; min-height: 24px; font-weight: 500; }
 #feedback.correct { color: #2ecc71; }
 #feedback.incorrect { color: #e74c3c; }
-
 
 /* ---- GİZLEME SINIFI ---- */
 .hidden {
@@ -179,26 +150,32 @@ button#listen-again-button:hover {
 
 /* Responsive adjustments */
 @media (max-width: 600px) {
-    h1 { font-size: 1.4em; line-height: 1.2; }
-    .category-group label { font-size: 0.85em; margin: 3px 5px;} /* Mobil etiketler daha da küçük */
-    .category-group input[type="checkbox"] { transform: scale(1); margin-right: 4px;}
+    h1 { font-size: 1.35em; line-height: 1.2; } /* Title smaller on medium mobile */
+    .category-group label { font-size: 0.8em; flex-basis: 40%;} /* Adjust label size/basis */
     .round-button { width: 100px; height: 100px; font-size: 0.9em; }
     .correct-letter-box { width: 28px; height: 34px; font-size: 16px; margin: 2px; }
     button#listen-again-button { font-size: 0.8em; padding: 6px 12px;}
 }
 @media (max-width: 420px) {
-     body { padding: 5px 10px;}
-     .container { padding: 15px;}
-    h1 { font-size: 1.25em; margin-bottom: 10px;}
+    body { padding: 5px 10px;}
+    .container { padding: 15px;}
+    h1 { font-size: 1.15em; line-height: 1.15; margin-bottom: 10px;} /* Title even smaller */
      #category-selection-area { margin-bottom: 15px; padding: 8px;}
      #category-selection-area h2 {font-size: 1em; margin-bottom: 8px;}
-     .category-group { margin-bottom: 3px; justify-content: space-between;} /* Daha iyi hizalama için */
-     .category-group label { font-size: 0.8em; margin: 2px 0;} /* Mobil etiketler */
-     .category-group input[type="checkbox"] { margin-right: 3px;}
+     .category-group { margin-bottom: 5px; justify-content: space-between;}
+     .category-group label { font-size: 0.75em; margin: 0 2px; flex-basis: 48%;} /* Adjust basis for 2x2 */
+     .category-group input[type="checkbox"] { margin-right: 3px; transform: scale(1);}
     #game-area { gap: 10px; margin-top: 10px;}
     .round-button { width: 85px; height: 85px; font-size: 0.8em; }
-    .correct-letter-box { width: 24px; height: 30px; font-size: 14px; margin: 1px; border-width: 1px;}
+    .correct-letter-box { width: 24px; height: 30px; font-size: 14px; margin: 1px; border-width: 1px;} /* Even smaller boxes */
     #feedback { font-size: 0.9em; margin-top: 8px;}
      button#listen-again-button { width: 50%; max-width: 150px; font-size: 0.75em; padding: 5px 10px;}
      #correct-word-feedback-area { margin-top: 8px;}
+}
+
+/* Ekstra küçük ekranlar için */
+@media (max-width: 360px) {
+    .correct-letter-box { width: 22px; height: 28px; font-size: 13px; margin: 1px;}
+    h1 { font-size: 1.1em; }
+    .category-group label { font-size: 0.7em; }
 }
