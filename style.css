@@ -1,82 +1,190 @@
 body {
-    font-family: sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background-color: #f0f0f0;
+    background-color: #f0f8ff; /* AliceBlue for a lighter, kid-friendly background */
     margin: 0;
+    padding: 10px;
+    box-sizing: border-box;
 }
 
 .container {
     background-color: white;
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    padding: 20px 30px;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.12);
     text-align: center;
+    width: 100%;
+    max-width: 550px; /* Slightly wider for potentially longer title */
+}
+
+h1 {
+    color: #333;
+    font-size: 1.8em; /* Adjust as needed */
+    margin-bottom: 25px;
+    font-weight: 600;
+    line-height: 1.3; /* For multi-line titles if they occur */
 }
 
 #word-display-container {
     display: flex;
     justify-content: center;
-    margin-bottom: 20px;
-    min-height: 50px; /* Kutu kaymasını engellemek için */
+    align-items: center;
+    margin-bottom: 25px;
+    min-height: 50px;
+    flex-wrap: wrap;
 }
 
 .letter-box {
-    border: 2px solid #ccc;
-    width: 40px;
-    height: 40px;
-    margin: 0 5px;
+    border: 2px solid #b0c4de; /* LightSteelBlue border */
+    width: 38px;
+    height: 38px;
+    margin: 4px;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 24px;
+    font-size: 22px;
     font-weight: bold;
     text-transform: uppercase;
-    background-color: #fff;
+    background-color: #f8f9fa;
+    color: #333;
+    border-radius: 6px; /* Softer corners */
+    transition: border-color 0.3s, box-shadow 0.3s;
 }
 
 .letter-box.filled {
-    border-color: #3498db;
-    background-color: #eaf2f8;
+    border-color: #4682b4; /* SteelBlue for filled */
 }
 
 input[type="text"] {
-    padding: 10px;
-    margin-right: 10px;
+    padding: 12px;
+    margin-top: 10px;
+    margin-bottom: 15px;
+    margin-right: 5px;
     border: 1px solid #ccc;
-    border-radius: 5px;
-    width: 100px;
+    border-radius: 6px;
+    width: calc(50% - 15px);
+    max-width: 130px;
     text-align: center;
     font-size: 16px;
+    box-sizing: border-box;
 }
 
+input[type="text"]:focus {
+    border-color: #4682b4;
+    box-shadow: 0 0 5px rgba(70, 130, 180, 0.4);
+    outline: none;
+}
+
+
 button {
-    padding: 10px 15px;
+    padding: 12px 18px;
     margin: 5px;
     border: none;
-    border-radius: 5px;
-    background-color: #3498db;
+    border-radius: 6px;
+    background-color: #5cacee; /* A friendly blue */
     color: white;
     cursor: pointer;
     font-size: 16px;
+    font-weight: 500;
+    transition: background-color 0.2s ease-in-out, transform 0.1s ease;
 }
 
 button:hover {
-    background-color: #2980b9;
+    background-color: #4a8dc7; /* Darker shade on hover */
+}
+
+button:active {
+    transform: translateY(1px); /* Slight press effect */
+}
+
+button:disabled {
+    background-color: #a0a0a0; /* Greyed out when disabled */
+    cursor: not-allowed;
 }
 
 #feedback {
-    margin-top: 15px;
-    font-size: 18px;
-    min-height: 25px; /* Geri bildirim alanı için yer ayır */
+    margin-top: 20px;
+    font-size: 17px;
+    min-height: 25px;
+    font-weight: 500;
 }
 
 #feedback.correct {
-    color: green;
+    color: #28a745; /* Bootstrap green */
 }
 
 #feedback.incorrect {
-    color: red;
+    color: #dc3545; /* Bootstrap red */
+}
+
+p {
+    font-size: 16px;
+    color: #555;
+    margin-top: 8px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    .container {
+        padding: 20px;
+    }
+
+    h1 {
+        font-size: 1.6em;
+    }
+
+    .letter-box {
+        width: 32px;
+        height: 32px;
+        font-size: 18px;
+        margin: 3px;
+    }
+
+    input[type="text"] {
+        padding: 10px;
+        font-size: 15px;
+        width: calc(60% - 10px);
+        margin-bottom:10px;
+
+    }
+
+    button {
+        padding: 10px 15px;
+        font-size: 15px;
+        width: calc(50% - 10px); /* Make buttons take half width on smaller screens */
+        box-sizing: border-box;
+    }
+    #submit-letter-button{
+        width: calc(100% - 20px);
+        margin-bottom: 10px;
+    }
+}
+
+@media (max-width: 420px) {
+    h1 {
+        font-size: 1.4em;
+    }
+    .letter-box {
+        width: 28px;
+        height: 28px;
+        font-size: 16px;
+        margin: 2px;
+    }
+    input[type="text"]{
+        width: 100px;
+    }
+
+    button {
+        font-size: 14px;
+        padding: 10px 8px;
+    }
+     #submit-letter-button{
+        width: calc(100% - 10px);
+    }
+     #speak-button, #next-word-button{
+         width: calc(50% - 8px);
+    }
 }
