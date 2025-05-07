@@ -9,11 +9,12 @@
 <body>
     <div class="container">
         <h1>WILLOW CLASS - SAT SPELLING</h1>
-        <div id="word-display-container">
+        <div id="word-input-container">
             </div>
-        <div id="word-to-spell" style="display: none;"></div> <input type="text" id="letter-input" maxlength="1" placeholder="Enter a letter">
-        <button id="submit-letter-button">Place Letter</button>
-        <button id="speak-button">Listen</button> <button id="next-word-button">Next Word</button>
+        <div id="word-data-holder" style="display: none;"></div> <div class="controls">
+            <button id="speak-button">Listen</button>
+            <button id="check-word-button">Check Word</button> <button id="next-word-button">Next Word</button>
+        </div>
         <p id="feedback"></p>
         <p>Correct: <span id="correct-count">0</span></p>
         <p>Words Remaining: <span id="remaining-count">0</span></p>
