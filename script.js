@@ -1,4 +1,6 @@
 const wordsData = [
+    // ... (Kelimeler ve cümleler bir önceki yanıttaki gibi aynı kalacak)
+    // Örnek:
     { word: "accommodate", sentence: "The small car can accommodate four people." },
     { word: "accompany", sentence: "My dog will accompany me on my walk." },
     { word: "according", sentence: "According to the map, we are here." },
@@ -101,17 +103,14 @@ const wordsData = [
     { word: "yacht", sentence: "They sailed the yacht across the sea." }
 ];
 
-let currentWordData = null; // Will hold { word: "...", sentence: "..." }
-let guessedLetters = [];
-let focusIndex = 0;
+let currentWordData = null;
 let correctCount = 0;
-let wordsToPlay = [...wordsData]; // Create a mutable copy
+let wordsToPlay = [...wordsData];
+let speechEngine; // To hold the SpeechSynthesis object
 
-const wordDisplayContainer = document.getElementById('word-display-container');
-const wordToSpellDiv = document.getElementById('word-to-spell');
-const letterInput = document.getElementById('letter-input');
-const submitLetterButton = document.getElementById('submit-letter-button');
+const wordInputContainer = document.getElementById('word-input-container');
 const speakButton = document.getElementById('speak-button');
+const checkWordButton = document.getElementById('check-word-button');
 const nextWordButton = document.getElementById('next-word-button');
 const feedbackDiv = document.getElementById('feedback');
 const correctCountSpan = document.getElementById('correct-count');
@@ -120,262 +119,316 @@ const remainingCountSpan = document.getElementById('remaining-count');
 // --- Speech Synthesis Queue ---
 let speechQueue = [];
 let isSpeaking = false;
+let availableVoices = [];
+
+function initializeSpeechSynthesis() {
+    speechEngine = window.speechSynthesis;
+    if (speechEngine.onvoiceschanged !== undefined) {
+        speechEngine.onvoiceschanged = loadVoices;
+    }
+    loadVoices(); // Load voices initially
+}
+
+function loadVoices() {
+    availableVoices = speechEngine.getVoices().filter(voice => voice.lang.startsWith('en'));
+    // console.log("Available English voices:", availableVoices);
+    if (availableVoices.length > 0 && !currentWordData) {
+         // If voices loaded and game hasn't started, start it.
+         // This ensures that if onvoiceschanged is the first trigger, the game starts.
+        setTimeout(() => { if(!currentWordData) loadNextWord();}, 100);
+    }
+}
+
+
+function createUtterance(text) {
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'en-GB';
+    utterance.volume = 1; // Max volume
+    utterance.rate = 0.95; // Slightly slower for clarity, adjust as needed
+    utterance.pitch = 1.0; // Default pitch
+
+    // Voice selection priority:
+    // 1. Google UK English Female
+    // 2. Microsoft UK English Female (e.g., Susan, Hazel for Edge)
+    // 3. Any other UK English Female
+    // 4. Any Google UK English
+    // 5. Any UK English
+    let selectedVoice = availableVoices.find(voice => voice.lang === 'en-GB' && voice.name.toLowerCase().includes('google') && voice.name.toLowerCase().includes('female'));
+    if (!selectedVoice) {
+        selectedVoice = availableVoices.find(voice => voice.lang === 'en-GB' && voice.name.toLowerCase().includes('microsoft') && voice.name.toLowerCase().includes('female'));
+    }
+    if (!selectedVoice) {
+        selectedVoice = availableVoices.find(voice => voice.lang === 'en-GB' && voice.gender === 'female');
+    }
+    if (!selectedVoice) {
+        selectedVoice = availableVoices.find(voice => voice.lang === 'en-GB' && voice.name.toLowerCase().includes('google'));
+    }
+    if (!selectedVoice) {
+        selectedVoice = availableVoices.find(voice => voice.lang === 'en-GB');
+    }
+
+    if (selectedVoice) {
+        utterance.voice = selectedVoice;
+        // console.log("Using voice:", selectedVoice.name);
+    } else {
+        // console.warn("No specific en-GB voice found, using browser default for en-GB if available.");
+    }
+    return utterance;
+}
 
 function addToSpeechQueue(text) {
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'en-GB'; // British English
-    // utterance.rate = 0.9; // Slightly slower if needed
-    // utterance.pitch = 1.0;
-
-    // Optional: Try to find a specific British voice
-    const voices = speechSynthesis.getVoices();
-    // First, try to find a preferred Google UK English female voice if available
-    let britishVoice = voices.find(voice => voice.lang === 'en-GB' && voice.name.toLowerCase().includes('google') && voice.name.toLowerCase().includes('female'));
-    if (!britishVoice) { // If not found, try any Google UK English voice
-        britishVoice = voices.find(voice => voice.lang === 'en-GB' && voice.name.toLowerCase().includes('google'));
-    }
-    if (!britishVoice) { // If still not found, try any UK English female voice
-        britishVoice = voices.find(voice => voice.lang === 'en-GB' && voice.gender === 'female');
-    }
-    if (!britishVoice) { // Fallback to the first available en-GB voice
-        britishVoice = voices.find(voice => voice.lang === 'en-GB');
-    }
-    if (britishVoice) {
-        utterance.voice = britishVoice;
-    }
-
+    if (!text || text.trim() === "") return; // Don't queue empty strings
+    const utterance = createUtterance(text);
     speechQueue.push(utterance);
+    // console.log("Added to queue:", text, "Queue length:", speechQueue.length);
     processSpeechQueue();
 }
 
 function processSpeechQueue() {
-    if (isSpeaking || speechQueue.length === 0) {
+    if (isSpeaking || speechQueue.length === 0 || !speechEngine) {
         return;
     }
     isSpeaking = true;
+    speakButton.disabled = true; // Disable while speaking
     const utterance = speechQueue.shift();
+
     utterance.onend = () => {
+        // console.log("Finished speaking:", utterance.text);
         isSpeaking = false;
-        processSpeechQueue(); // Process next item in queue
+        if (speechQueue.length === 0) { // Re-enable button only when queue is empty
+           speakButton.disabled = false;
+        }
+        processSpeechQueue();
     };
     utterance.onerror = (event) => {
-        console.error('Speech synthesis error:', event.error);
+        console.error('Speech synthesis error:', event.error, "for text:", utterance.text);
         isSpeaking = false;
-        feedbackDiv.textContent = "Sorry, there was an error with speech.";
+        speakButton.disabled = false; // Re-enable on error
+        feedbackDiv.textContent = `Error speaking. Try again. (${event.error})`;
         feedbackDiv.className = 'incorrect';
-        processSpeechQueue(); // Try to process next item even if one fails
+        // Don't clear the queue, just try the next one if any or stop.
+        // For robustness, we might want to clear the queue if an error is critical.
+        // speechQueue = []; // Option: clear queue on any error
+        processSpeechQueue(); // Attempt to process next if any, or just stop.
     };
-    speechSynthesis.speak(utterance);
+    // console.log("Now speaking:", utterance.text);
+    speechEngine.speak(utterance);
 }
-// --- End Speech Synthesis Queue ---
-
+// --- End Speech Synthesis ---
 
 function pickNewWord() {
     if (wordsToPlay.length === 0) {
         feedbackDiv.textContent = "Congratulations! You have completed all the words.";
         feedbackDiv.className = 'correct';
         disableGameControls(true);
-        nextWordButton.disabled = true;
         return null;
     }
     const randomIndex = Math.floor(Math.random() * wordsToPlay.length);
     const wordDataItem = wordsToPlay[randomIndex];
-    // Temporarily remove to avoid quick repeat, could be added back for true random shuffle
-    wordsToPlay.splice(randomIndex, 1);
+    wordsToPlay.splice(randomIndex, 1); // Remove to avoid immediate repetition
     return wordDataItem;
 }
 
-function displayWord() {
-    wordDisplayContainer.innerHTML = '';
-    guessedLetters = Array(currentWordData.word.length).fill('');
-    focusIndex = 0;
+function createLetterInputs() {
+    wordInputContainer.innerHTML = ''; // Clear previous inputs
+    const word = currentWordData.word;
 
-    for (let i = 0; i < currentWordData.word.length; i++) {
-        const letterBox = document.createElement('div');
-        letterBox.classList.add('letter-box');
-        letterBox.dataset.index = i;
-        letterBox.textContent = '';
-        wordDisplayContainer.appendChild(letterBox);
+    for (let i = 0; i < word.length; i++) {
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.classList.add('letter-input');
+        input.maxLength = 1;
+        input.dataset.index = i;
+        // input.setAttribute('aria-label', `Letter ${i + 1} of ${word.length}`);
+
+        input.addEventListener('input', (e) => {
+            // Auto-focus next input
+            const nextInput = wordInputContainer.children[i + 1];
+            if (e.target.value && nextInput) {
+                nextInput.focus();
+            }
+            // Optionally, trigger checkWord if it's the last input and filled
+            // if (e.target.value && i === word.length - 1) {
+            //     checkWord();
+            // }
+        });
+
+        input.addEventListener('keydown', (e) => {
+            // Auto-focus previous on backspace if current is empty
+            if (e.key === 'Backspace' && !e.target.value) {
+                const prevInput = wordInputContainer.children[i - 1];
+                if (prevInput) {
+                    prevInput.focus();
+                }
+            } else if (e.key === 'ArrowRight') {
+                const nextInput = wordInputContainer.children[i + 1];
+                if (nextInput) nextInput.focus();
+                e.preventDefault();
+            } else if (e.key === 'ArrowLeft') {
+                const prevInput = wordInputContainer.children[i - 1];
+                if (prevInput) prevInput.focus();
+                e.preventDefault();
+            }
+        });
+        wordInputContainer.appendChild(input);
     }
-
-    wordToSpellDiv.textContent = currentWordData.word; // Store just the word for checking
-    feedbackDiv.textContent = '';
-    feedbackDiv.className = '';
-    letterInput.value = '';
-    letterInput.disabled = false;
-    submitLetterButton.disabled = false;
-    speakButton.disabled = false;
-    nextWordButton.disabled = true;
-    letterInput.focus();
-    updateRemainingCount();
-    updateBoxFocus();
 }
 
-function updateBoxFocus() {
-    const boxes = wordDisplayContainer.querySelectorAll('.letter-box');
-    boxes.forEach((box, index) => {
-        if (index === focusIndex && focusIndex < currentWordData.word.length) {
-            box.style.borderColor = 'blue';
-            box.style.boxShadow = '0 0 8px rgba(0, 0, 255, 0.4)';
-        } else {
-            box.style.borderColor = '#b0c4de'; // Default border color
-            box.style.boxShadow = 'none';
-        }
-    });
+function displayNewWord() {
+    createLetterInputs();
+    feedbackDiv.textContent = '';
+    feedbackDiv.className = '';
+    checkWordButton.disabled = false;
+    speakButton.disabled = false;
+    nextWordButton.disabled = true; // Disabled until current word is attempted/passed
+    updateRemainingCount();
+    if (wordInputContainer.children[0]) {
+        wordInputContainer.children[0].focus(); // Focus the first letter input
+    }
 }
 
 function playWordSequence() {
-    if (!currentWordData) return;
-    speechSynthesis.cancel(); // Cancel any ongoing speech
-    speechQueue = []; // Clear previous queue
-    isSpeaking = false;
-
-    addToSpeechQueue(currentWordData.word);
-    addToSpeechQueue(currentWordData.sentence);
-    addToSpeechQueue(currentWordData.word);
-}
-
-function handleLetterInput() {
-    const letter = letterInput.value.trim().toLowerCase();
-    letterInput.value = '';
-
-    if (!letter.match(/^[a-z]$/)) {
-        letterInput.focus();
+    if (!currentWordData || !speechEngine) {
+        // console.log("Cannot play sequence: no current word or speech engine not ready.");
+        if (!speechEngine) feedbackDiv.textContent = "Speech engine not ready.";
         return;
     }
+    speechEngine.cancel(); // Cancel any ongoing speech immediately
+    speechQueue = []; // Clear previous queue before adding new items
+    isSpeaking = false; // Reset speaking state
 
-    const boxes = wordDisplayContainer.querySelectorAll('.letter-box');
-    if (focusIndex < currentWordData.word.length) {
-        boxes[focusIndex].textContent = letter;
-        guessedLetters[focusIndex] = letter;
-
-        if (letter === currentWordData.word[focusIndex]) {
-            boxes[focusIndex].style.color = '#28a745';
-        } else {
-            boxes[focusIndex].style.color = '#dc3545';
-        }
-
-        focusIndex++;
-        if (focusIndex < currentWordData.word.length) {
-            updateBoxFocus();
-            letterInput.focus();
-        } else {
-            checkWord();
-            letterInput.disabled = true;
-            submitLetterButton.disabled = true;
-        }
-    }
+    // console.log("Queueing word:", currentWordData.word);
+    addToSpeechQueue(currentWordData.word);
+    // console.log("Queueing sentence:", currentWordData.sentence);
+    addToSpeechQueue(currentWordData.sentence);
+    // console.log("Queueing word again:", currentWordData.word);
+    addToSpeechQueue(currentWordData.word);
 }
 
 function checkWord() {
-    const guessedWord = guessedLetters.join('');
+    if (!currentWordData) return;
+
+    const letterInputs = wordInputContainer.querySelectorAll('.letter-input');
+    let guessedWord = "";
+    letterInputs.forEach(input => {
+        guessedWord += input.value.toLowerCase();
+    });
+
     const targetWord = currentWordData.word;
-    const boxes = wordDisplayContainer.querySelectorAll('.letter-box');
     let allCorrect = true;
 
     for (let i = 0; i < targetWord.length; i++) {
-        if (guessedLetters[i] === targetWord[i]) {
-            boxes[i].style.borderColor = '#28a745';
-            boxes[i].style.color = '#28a745';
+        const input = letterInputs[i];
+        input.classList.remove('correct', 'incorrect'); // Reset classes
+        if (input.value.toLowerCase() === targetWord[i]) {
+            input.classList.add('correct');
         } else {
-            boxes[i].style.borderColor = '#dc3545';
-            boxes[i].style.color = '#dc3545';
+            input.classList.add('incorrect');
             allCorrect = false;
         }
     }
 
-    if (allCorrect) {
+    if (allCorrect && guessedWord.length === targetWord.length) {
         feedbackDiv.textContent = `Well done! You spelled "${targetWord}" correctly.`;
         feedbackDiv.className = 'correct';
         correctCount++;
         correctCountSpan.textContent = correctCount;
-        nextWordButton.disabled = false;
-        nextWordButton.focus();
-        disableGameControls(false, true);
-    } else {
-        feedbackDiv.textContent = "Not quite right. Try correcting or listen again.";
-        feedbackDiv.className = 'incorrect';
-        // Reset focus to the first incorrect letter for correction (optional)
-        let firstErrorIndex = guessedLetters.findIndex((gl, idx) => gl !== targetWord[idx]);
-        focusIndex = (firstErrorIndex !== -1) ? firstErrorIndex : 0;
-
-        // Re-enable input for corrections and clear wrong letters
-        letterInput.disabled = false;
-        submitLetterButton.disabled = false;
-        updateBoxFocus();
-        letterInput.focus();
-        // Clear the incorrect letters from boxes and guessedLetters to allow re-typing from first error
-        for (let i = focusIndex; i < targetWord.length; i++) {
-            boxes[i].textContent = '';
-            guessedLetters[i] = '';
-            boxes[i].style.color = '#333'; // Reset color
-            // boxes[i].style.borderColor = '#b0c4de'; // Reset border if needed for retry
-        }
-        nextWordButton.disabled = false; // Allow skipping
+        disableGameControls(false, true); // Keep speak/next active
+    } else if (guessedWord.length < targetWord.length && guessedWord.length > 0) {
+        feedbackDiv.textContent = "Keep going, fill all the letters!";
+        feedbackDiv.className = ''; // Neutral feedback
     }
-    updateRemainingCount();
+    else {
+        feedbackDiv.textContent = "Not quite right. Check the red letters and try again.";
+        feedbackDiv.className = 'incorrect';
+        // Allow user to correct. Focus on first incorrect or first empty.
+        let firstErrorOrEmpty = -1;
+        for(let i=0; i<letterInputs.length; i++){
+            if(!letterInputs[i].value || letterInputs[i].classList.contains('incorrect')){
+                firstErrorOrEmpty = i;
+                break;
+            }
+        }
+        if(firstErrorOrEmpty !== -1) letterInputs[firstErrorOrEmpty].focus();
+        else if(letterInputs[0]) letterInputs[0].focus(); // Fallback to first input
+    }
+    nextWordButton.disabled = false; // Always enable next word after a check
 }
 
+
 function disableGameControls(all = true, afterCorrect = false) {
-    letterInput.disabled = true;
-    submitLetterButton.disabled = true;
-    if (all) {
+    checkWordButton.disabled = true;
+    const inputs = wordInputContainer.querySelectorAll('.letter-input');
+    inputs.forEach(input => input.disabled = true);
+
+    if (all) { // Game over
+        speakButton.disabled = true;
+        nextWordButton.disabled = true;
+    } else if (afterCorrect) {
+        speakButton.disabled = false;
+        nextWordButton.disabled = false;
+        // Inputs remain disabled as word is correct
+    } else { // General disable (e.g. while loading)
         speakButton.disabled = true;
         nextWordButton.disabled = true;
     }
-    if (afterCorrect) {
-        speakButton.disabled = false; // Keep speak active
-        nextWordButton.disabled = false;
-    }
 }
 
+function enableGameControlsForNewWord() {
+    checkWordButton.disabled = false;
+    speakButton.disabled = false;
+    nextWordButton.disabled = true; // Next word is enabled after check or if skipped
+    const inputs = wordInputContainer.querySelectorAll('.letter-input');
+    inputs.forEach(input => input.disabled = false);
+}
+
+
 function loadNextWord() {
+    if (isSpeaking && speechEngine) { // If it's speaking, stop it before loading next word
+        speechEngine.cancel();
+        speechQueue = [];
+        isSpeaking = false;
+    }
     currentWordData = pickNewWord();
     if (currentWordData) {
-        displayWord();
-        playWordSequence(); // Play new word sequence automatically
+        enableGameControlsForNewWord();
+        displayNewWord();
+        playWordSequence();
+    } else {
+        // No more words, handled in pickNewWord
+        updateRemainingCount(); // Ensure remaining count is 0
     }
 }
 
 function updateRemainingCount() {
-    remainingCountSpan.textContent = wordsToPlay.length + (currentWordData ? 1 : 0);
-    if(wordsToPlay.length === 0 && !currentWordData){ // Truly game over state
-        remainingCountSpan.textContent = 0;
+    // If currentWordData exists, it's the one being played, so add 1 to wordsToPlay.length
+    let count = wordsToPlay.length + (currentWordData ? 1 : 0);
+    if (!currentWordData && wordsToPlay.length === 0) { // Truly game over
+        count = 0;
     }
+    remainingCountSpan.textContent = count;
 }
 
-// Event Listeners
-speakButton.addEventListener('click', playWordSequence);
-nextWordButton.addEventListener('click', loadNextWord);
-submitLetterButton.addEventListener('click', handleLetterInput);
 
-letterInput.addEventListener('keypress', function(event) {
-    if (event.key === 'Enter') {
-        event.preventDefault();
-        handleLetterInput();
+// --- Initialize ---
+document.addEventListener('DOMContentLoaded', () => {
+    initializeSpeechSynthesis(); // Setup speech synthesis capabilities
+    // Initial load can be triggered by voices loaded, or with a small delay
+    // We'll rely on loadVoices to call loadNextWord if appropriate
+    // If voices load very fast, loadNextWord might be called before DOMContentLoaded fully.
+    // So, ensure critical DOM elements are ready.
+    if (availableVoices.length === 0 && speechEngine && !speechEngine.speaking && !speechEngine.pending) {
+        // If voices haven't loaded yet and speech is not active, try a delayed start
+        // This is a fallback for browsers where onvoiceschanged might be unreliable or slow.
+        setTimeout(() => {
+            if(!currentWordData && wordsToPlay.length > 0) loadNextWord();
+        }, 500); // Delay to allow voices to potentially load
+    } else if (availableVoices.length > 0 && !currentWordData && wordsToPlay.length > 0){
+        loadNextWord(); // If voices are already available, load immediately.
     }
+
+
+    speakButton.addEventListener('click', playWordSequence);
+    checkWordButton.addEventListener('click', checkWord);
+    nextWordButton.addEventListener('click', loadNextWord);
 });
-
-// Ensure voices are loaded before first speech attempt (especially for Firefox)
-if (speechSynthesis.onvoiceschanged !== undefined) {
-    speechSynthesis.onvoiceschanged = () => {
-        // Voices loaded, can try to get specific voices now if needed earlier
-        // console.log("Voices loaded:", speechSynthesis.getVoices());
-        if(!currentWordData) loadNextWord(); // Load first word if voices change triggers before initial load
-    };
-}
-
-
-// Initial load - Defer slightly to allow voices to load on some browsers
-// or load after voiceschanged event
-if (speechSynthesis.getVoices().length > 0) {
-    loadNextWord();
-} else {
-    // Fallback if onvoiceschanged doesn't fire or voices are not immediately available
-    // A small timeout can help, or rely on the onvoiceschanged event for browsers that support it well.
-    // For simplicity, we can try loading. If voices are not ready for the first word, user might need to click "Listen" again.
-    // Or, the first "playWordSequence" might use default voice if specific en-GB is not yet listed.
-    setTimeout(() => {
-         if(!currentWordData) loadNextWord(); // Load first word if not loaded by voiceschanged
-    }, 200); // 200ms delay, adjust if needed
-}
