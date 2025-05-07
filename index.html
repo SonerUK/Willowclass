@@ -3,29 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Willow Class - SAT Spelling</title>
+    <title>Willow Class - SAT Spelling Practice</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
         <h1>WILLOW CLASS - SAT SPELLING</h1>
-        <div id="word-input-container">
+
+        <div id="category-selection-area">
+            <h2>Select Categories:</h2>
+            <div class="category-group">
+                <label><input type="checkbox" name="category" value="year34_1"> Years 3-4 (Part 1)</label>
+                <label><input type="checkbox" name="category" value="year34_2"> Years 3-4 (Part 2)</label>
             </div>
+            <div class="category-group">
+                <label><input type="checkbox" name="category" value="year56_1"> Years 5-6 (Part 1)</label>
+                <label><input type="checkbox" name="category" value="year56_2"> Years 5-6 (Part 2)</label>
+            </div>
+        </div>
 
-        <div id="correct-word-feedback-area" style="display: none;">
-            <p id="correct-word-label">Correct spelling:</p>
-            <div id="correct-word-display-container">
+        <div id="game-area">
+            <button id="main-action-button" class="round-button">Start</button>
+            <button id="listen-again-button" style="display: none;">Listen Again</button>
+
+            <div id="word-input-container" style="display: none;">
                 </div>
+
+            <div id="correct-word-feedback-area" style="display: none;">
+                <p id="correct-word-label">Correct spelling:</p>
+                <div id="correct-word-display-container">
+                    </div>
+            </div>
         </div>
 
-        <div id="word-data-holder" style="display: none;"></div> <div class="controls">
-            <button id="speak-button">Listen</button>
-            <button id="check-word-button">Check Word</button>
-            <button id="next-word-button">Next Word</button>
-        </div>
         <p id="feedback"></p>
-        <p>Correct: <span id="correct-count">0</span></p>
-        <p>Words Remaining: <span id="remaining-count">0</span></p>
+        <div id="score-area" style="display: none;">
+             <p>Correct: <span id="correct-count">0</span></p>
+             <p>Words Remaining in Selection: <span id="remaining-count">0</span></p>
+        </div>
     </div>
     <script src="script.js"></script>
 </body>
