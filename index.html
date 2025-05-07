@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Willow Class interactive SAT spelling practice platform. Listen to words and sentences, then spell them correctly.">
     <title>Willow Class - SAT Spelling Practice</title>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -24,12 +25,12 @@
 
         <div id="game-area">
             <button id="main-action-button" class="round-button">Start</button>
-            <button id="listen-again-button" style="display: none;">Listen Again</button>
+             <button id="listen-again-button" class="hidden">Listen Again</button>
 
-            <div id="word-input-container" style="display: none;">
+             <div id="word-input-container" class="hidden">
                 </div>
 
-            <div id="correct-word-feedback-area" style="display: none;">
+             <div id="correct-word-feedback-area" class="hidden">
                 <p id="correct-word-label">Correct spelling:</p>
                 <div id="correct-word-display-container">
                     </div>
@@ -37,7 +38,7 @@
         </div>
 
         <p id="feedback"></p>
-        <div id="score-area" style="display: none;">
+         <div id="score-area" class="hidden">
              <p>Correct: <span id="correct-count">0</span></p>
              <p>Words Remaining in Selection: <span id="remaining-count">0</span></p>
         </div>
