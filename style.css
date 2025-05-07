@@ -128,14 +128,13 @@ button#listen-again-button:hover {
 }
 
 
-/* Input and Feedback Area Styles (mostly same as before) */
+/* Input and Feedback Area Styles */
 #word-input-container {
-    display: flex; /* Varsayılan görünür durum */
+    display: flex; /* Default display state when not hidden */
     justify-content: center;
     align-items: center;
     min-height: 50px;
     flex-wrap: wrap;
-    /* display: none; /* Controlled by .hidden class */
 }
 
 .letter-input {
@@ -160,7 +159,7 @@ button#listen-again-button:hover {
 
 #correct-word-feedback-area {
     margin-top: 10px;
-    /* display: none; /* Controlled by .hidden class */
+    /* display: block; /* Default display state when not hidden */
 }
 #correct-word-label { margin-bottom: 5px; font-weight: bold; color: #2c3e50; font-size: 0.95em;}
 #correct-word-display-container { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; }
@@ -177,13 +176,13 @@ button#listen-again-button:hover {
 
 #score-area {
     margin-top: 20px;
-     /* display: none; /* Controlled by .hidden class */
+    /* display: block; /* Default display state when not hidden */
 }
 #score-area p { font-size: 1em; color: #34495e; margin: 5px 0; }
 
 /* ---- GİZLEME SINIFI ---- */
 .hidden {
-    display: none !important; /* !important, diğer display kurallarını ezmek için */
+    display: none !important;
 }
 
 /* Responsive adjustments */
